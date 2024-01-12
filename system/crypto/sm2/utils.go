@@ -7,7 +7,6 @@ package sm2
 import (
 	"math/big"
 
-	"github.com/btcsuite/btcd/btcec"
 	"github.com/tjfoc/gmsm/sm2"
 )
 
@@ -28,7 +27,7 @@ func canonicalizeInt(val *big.Int) []byte {
 	return b
 }
 
-//Serialize 序列化
+// Serialize 序列化
 func Serialize(r, s *big.Int) []byte {
 	rb := canonicalizeInt(r)
 	sb := canonicalizeInt(s)
@@ -48,17 +47,13 @@ func Serialize(r, s *big.Int) []byte {
 	return b
 }
 
-//Deserialize 反序列化
+// Deserialize 反序列化
 func Deserialize(sigStr []byte) (*big.Int, *big.Int, error) {
-	sig, err := btcec.ParseDERSignature(sigStr, sm2.P256Sm2())
-	if err != nil {
-		return nil, nil, err
-	}
-
-	return sig.R, sig.S, nil
+	panic("sm2 not support")
+	return nil, nil, nil
 }
 
-//SerializePublicKey 公钥序列化
+// SerializePublicKey 公钥序列化
 func SerializePublicKey(p *sm2.PublicKey, isCompress bool) []byte {
 	if isCompress {
 		return sm2.Compress(p)
@@ -70,7 +65,7 @@ func SerializePublicKey(p *sm2.PublicKey, isCompress bool) []byte {
 	return paddedAppend(32, b, p.Y.Bytes())
 }
 
-//SerializePrivateKey 私钥序列化
+// SerializePrivateKey 私钥序列化
 func SerializePrivateKey(p *sm2.PrivateKey) []byte {
 	b := make([]byte, 0, SM2PrivateKeyLength)
 	return paddedAppend(SM2PrivateKeyLength, b, p.D.Bytes())
